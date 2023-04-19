@@ -1,6 +1,4 @@
-const {
-  default: MeetupList,
-} = require("@/components/Meetups/MeetupList/MeetupList");
+import MeetupList from "@/components/Meetups/MeetupList/MeetupList";
 
 const DUMMY_MEETUPS = [
   {
