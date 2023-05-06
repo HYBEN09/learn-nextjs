@@ -23,8 +23,6 @@ function HomePage(props) {
   return <MeetupList meetups={props.meetups} />;
 }
 
-// 주기적인 업데이트로도 부족할 수 있다. ➡️ 요청이 들어올 때마다 페이지를 다시 만들어야 할 때가 있죠.
-// 따라서 페이지를 동적으로 프리 제너레이트해야
 // export async function getServerSideProps(context) {
 //   const req = context.req;
 //   const res = context.res;
