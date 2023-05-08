@@ -1,48 +1,66 @@
+import { MongoClient, ObjectId } from "mongodb";
 import MeetupDetail from "@/components/Meetups/MeetupDetail/MeetupDetail";
 
-function MeetupDetailsPage() {
+function MeetupDetailsPage(props) {
   return (
     <MeetupDetail
-      image="https://thespreadissue.files.wordpress.com/2016/04/354a91ebb4654dec1b365e5eff5ddd4b.jpg?w=423&h=282"
-      title="First Meetup"
-      address="Some Street 5, Some City"
-      description="This is a first meetup"
+      image={props.meetupData.image}
+      title={props.meetupData.title}
+      address={props.meetupData.address}
+      description={props.meetupData.description}
     />
   );
 }
 
 export async function getStaticPaths() {
+  const client = await MongoClient.connect(
+    "mongodb+srv://byunhyebeen:sD9Exda81L74HIdd@first-project.6uro6j1.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+
+  const db = client.db();
+
+  const meetupsCollection = db.collection("meetups");
+
+  const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+
+  client.close();
+
   return {
     fallback: false,
-    paths: [
-      {
-        params: {
-          meetupId: "m1",
-        },
-      },
-      {
-        params: {
-          meetupId: "m2",
-        },
-      },
-    ],
+    paths: meetups.map((meetup) => ({
+      params: { meetupId: meetup._id.toString() },
+    })),
   };
 }
 
 export async function getStaticProps(context) {
   const meetupId = context.params.meetupId;
 
+  const client = await MongoClient.connect(
+    "mongodb+srv://byunhyebeen:sD9Exda81L74HIdd@first-project.6uro6j1.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+
+  const db = client.db();
+
+  const meetupsCollection = db.collection("meetups");
+
+  const selectedMeetup = await meetupsCollection.findOne({
+    _id: new ObjectId(meetupId),
+  });
+
+  client.close();
+
   return {
     props: {
       meetupData: {
-        image:
-          "https://thespreadissue.files.wordpress.com/2016/04/354a91ebb4654dec1b365e5eff5ddd4b.jpg?w=423&h=282",
-        id: meetupId,
-        title: "First Meetup",
-        address: "Some Street 5, Some City",
-        description: "This is a first meetup",
+        id: selectedMeetup._id.toString(),
+        title: selectedMeetup.title,
+        address: selectedMeetup.address,
+        image: selectedMeetup.image,
+        description: selectedMeetup.description,
       },
     },
   };
 }
+
 export default MeetupDetailsPage;
