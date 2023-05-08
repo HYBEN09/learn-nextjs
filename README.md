@@ -1,5 +1,7 @@
 ## nextjs 학습
 
+유데미 【한글자막】 React 완벽 가이드 with Redux, Next.js, TypeScript 강의를 들으며 학습
+
 ### 📌 배포경로 : https://nextjs-project-hyben09.vercel.app/
 
 - [x] 주요 기능 1: 내장 서버 측 렌더링(SEO 향상!)
